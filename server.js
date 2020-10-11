@@ -8,7 +8,6 @@ const userRoutes = require('./routes/user')
 const server = express();
 
 // Database
-
 mongoose.connect(process.env.DATABASE, {
   useNewUrlParser: true,
   useCreateIndex: true
