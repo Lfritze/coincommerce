@@ -79,3 +79,8 @@ userSchema.methods = {
     }
   }
 }
+
+// We use the mongoose.model() method to create a new model 
+// so for this "User" will be based on 'userSchema'
+// we can use this User model anywhere for creating a new user and updating a user, etc...
+module.exports = mongoose.model("User", userSchema);
