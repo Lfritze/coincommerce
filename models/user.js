@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 // Unique universal ID package
-const uuidv1 = require('uuid/v1');
+const {v1: uuidv1 } = require('uuid');
 
 // USER SCHEMA
 // TRIM removes any space at the beginning or the end
