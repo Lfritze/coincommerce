@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 // MORGAN is a middleware that allows us to easily log requests, errors, and more to the console
+// MORGAN allows up sto see the CRUD posts in the console
 const morgan = require('morgan');
 // body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body
 const bodyParser = require('body-parser')
