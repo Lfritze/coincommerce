@@ -4,12 +4,14 @@ const mongoose = require('mongoose');
 // MORGAN allows us to see the CRUD posts in the console
 const morgan = require('morgan');
 // body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 // We will be saving the user credentials in the cookie - A cookie is a small piece of data that a server sends to the user's web browser
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+// Express Validator (this is a middleware) (Note: I set it back to version 5.3.1 in pkg.json and ran npm install to prevent an error
+const expressValidator = require('express-validator');
 require('dotenv').config();
 // import routes
-const userRoutes = require('./routes/user')
+const userRoutes = require('./routes/user');
 
 // Server ***************
 const server = express();
@@ -27,6 +29,7 @@ server.use(morgan('dev'));
 // so that we get JSON data from the req.body
 server.use(bodyParser.json());
 server.use(cookieParser());
+server.use(expressValidator());
 
 // Routes Middleware **************
 // prepend api so any user route starts with api
