@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 // import from controllers
 const { signUp } = require('../controllers/user');
+// import userSignupValidator middleware
+const {userSignupValidator} = require('../validator/index');
 
 // any time there is a request coming in the 'signUp' this controller method will run - see /controllers/user.js
-router.post('/signup', signUp);
+// same thing with the userSignupValidator
+router.post('/signup', userSignupValidator, signUp);
 
 module.exports = router;
