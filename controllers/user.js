@@ -2,6 +2,11 @@
 const User = require('../models/user');
 // import our error message helper
 const { errorHandler } = require("../helpers/dbErrorHandler");
+// import json web toke to generate a signed token
+const jwt = require('jsonwebtoken');
+// import express-jwt for checking authorization
+const expressJwt = require('express-jwt');
+const { restart } = require('nodemon');
 
 exports.signUp = (req, res) => {
   // we are going to create a new user based on what we get from the req.body
@@ -23,5 +28,34 @@ exports.signUp = (req, res) => {
     res.json({
       user
     })
+  });
+};
+
+exports.signIn = (req, res) => {
+  // find the user based on email
+  const {email, password} = req.body
+  // we get the user IF the user exists in the database, else we get an error (so we use a callback function for this)
+  User.findOne({email}, (err, user) => {
+    if(err || !user ) {
+      return restart.status(400).json({
+        error: "User with this email does not exist"
+      }); 
+    }
+    // is user is found - make sure the email & password match
+    // create authenticate method in user model
+    if(!user.authenticate(password)) {
+      return res.status(401).json({
+        error: "Email and password don't match"
+      })
+    }
+    // generate a signed token with user id and secret (.env file)
+    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
+    // persist the token as 't' in cookie with expiry date
+    // expiry date is from now until 9999 seconds
+    res.cookie('t', token, {expire: new Date() + 9999})
+    // return response with user and token to frontend client
+    // NOTE we de-structure user so that way we don't have to use user._id, user.email, user.name, user.role etc
+    const {_id, name, email, role} = user
+    return res.json({token, user: {_id, email, name, role}})
   });
 };
