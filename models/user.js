@@ -62,6 +62,11 @@ userSchema.virtual('password')
 
 // Helper Methods
 userSchema.methods = {
+  // authenticate password 'plainText'
+  authenticate: function(plainText) {
+    // this return either true or false
+    return this.encryptPassword(plainText) === this.hashed_password
+  },
   encryptPassword: function(password) {
     // if password is null return empty 
     if(!password) return '';
