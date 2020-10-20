@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 require('dotenv').config();
 // import routes
+const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 
 // Server ***************
@@ -33,6 +34,7 @@ server.use(expressValidator());
 
 // Routes Middleware **************
 // prepend api so any user route starts with api
+server.use('/api', authRoutes);
 server.use('/api', userRoutes);
 
 
