@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const { requireSignin } = require('../controllers/auth');
+
 // import from controllers
-const { signUp, signIn, signOut, requireSignin } = require('../controllers/user');
-// import userSignupValidator middleware
-const {userSignupValidator} = require('../validator/index');
+const { userById } = require('../controllers/user');
 
-// any time there is a request coming in the 'signUp' this controller method will run - see /controllers/user.js
-// same thing with the userSignupValidator
-router.post('/signup', userSignupValidator, signUp);
-router.post('/signin', signIn);
-router.get('/signout', signOut);
+router.get('/secret/:userId', requireSignin, (req, res) => {
+ // we are sending the json response with the request profile which contains the user information
+  res.json({
+    user: req.profile
+  })
+})
 
-// anytime we want to restrict any routes, we can use the requireSignin middleware
-// router.get('/hello', requireSignin, (req, res) => {
-//   res.send('hello hello hello');
-// });
+// we are just taking the parameter 'userId' rather than using a 'get' method
+router.param('userId', userById)
 
 module.exports = router;
