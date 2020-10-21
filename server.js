@@ -13,6 +13,7 @@ require('dotenv').config();
 // import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+const categoryRoutes = require('./routes/category');
 
 // Server ***************
 const server = express();
@@ -37,7 +38,7 @@ server.use(expressValidator());
 // prepend api so any user route starts with api
 server.use('/api', authRoutes);
 server.use('/api', userRoutes);
-
+server.use('/api', categoryRoutes);
 
 // *********************
 
