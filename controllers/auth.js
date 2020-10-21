@@ -72,3 +72,28 @@ exports.requireSignin = expressJwt({
   algorithms: ["HS256"],
   userProperty: 'auth'
 })
+
+// MIDDLEWARE
+// we use next because this is middleware
+exports.isAuth = (req, res, next) => {
+  // make a 'user' variable to check
+  let user = req.profile && req.auth && req.profile._id == req.auth._id
+  // SO if we have a 'user' which returns TRUE, then we can authorize
+  // if NOT - then we return json response with error message (403) unauthorized
+  if (!user) {
+    return res.status(403).json({
+      error: 'Not Authorized! Access Denied'
+    });
+  }
+  next();
+};
+
+exports.isAdmin = (req, res, next) => {
+  // admin should === 1 , so if admin === 0 then it is 403 unauthorized
+  if (req.profile.role === 0) {
+    return res.status(403).json({
+      error: 'Admin Access! Access Denied' 
+    });
+  }
+  next();
+};
