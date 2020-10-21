@@ -3,7 +3,7 @@ const router = express.Router();
 // import from controllers
 const { signUp, signIn, signOut, requireSignin } = require('../controllers/auth');
 // import userSignupValidator middleware
-const {userSignupValidator} = require('../validator/index');
+const { userSignupValidator } = require('../validator/index');
 
 // any time there is a request coming in the 'signUp' this controller method will run - see /controllers/user.js
 // same thing with the userSignupValidator
