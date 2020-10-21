@@ -42,8 +42,6 @@ server.use('/api', categoryRoutes);
 
 // *********************
 
-
-
 const port = process.env.PORT || 8000;
 
 server.listen(port, () => {

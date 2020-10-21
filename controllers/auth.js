@@ -67,17 +67,18 @@ exports.signOut = (req, res) => {
   res.json({message: 'You have successfully signed out'});
 }
 
+// THIS is a MIDDLEWARE to protect routes
 exports.requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
   algorithms: ["HS256"],
   userProperty: 'auth'
-})
+});
 
 // MIDDLEWARE
 // we use next because this is middleware
 exports.isAuth = (req, res, next) => {
   // make a 'user' variable to check
-  let user = req.profile && req.auth && req.profile._id == req.auth._id
+  let user = req.profile && req.auth && req.profile._id == req.auth._id;
   // SO if we have a 'user' which returns TRUE, then we can authorize
   // if NOT - then we return json response with error message (403) unauthorized
   if (!user) {
