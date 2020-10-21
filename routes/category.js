@@ -17,7 +17,7 @@ router.post('/category/create/:userId',
 );
 
 // we are just taking the parameter 'userId' rather than using a 'get' method
-router.param('userId', userById)
+router.param('userId', userById);
 
 
 module.exports = router;
