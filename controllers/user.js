@@ -13,5 +13,4 @@ exports.userById = (req, res, next, id) => {
     // then we let it go to the next phase so it doesn't get stuck here
     next();
   });
-
 };

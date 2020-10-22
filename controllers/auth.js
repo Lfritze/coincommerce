@@ -33,9 +33,9 @@ exports.signUp = (req, res) => {
 
 exports.signIn = (req, res) => {
   // find the user based on email
-  const {email, password} = req.body
+  const { email, password } = req.body
   // we get the user IF the user exists in the database, else we get an error (so we use a callback function for this)
-  User.findOne({email}, (err, user) => {
+  User.findOne({ email }, (err, user) => {
     if(err || !user ) {
       return restart.status(400).json({
         error: "User with this email does not exist"
@@ -71,29 +71,31 @@ exports.signOut = (req, res) => {
 exports.requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
   algorithms: ["HS256"],
-  userProperty: 'auth'
+  userProperty: "auth"
 });
 
 // MIDDLEWARE
 // we use next because this is middleware
 exports.isAuth = (req, res, next) => {
-  // make a 'user' variable to check
+  // make a 'user' variable to check if the following comparison is TRUE
   let user = req.profile && req.auth && req.profile._id == req.auth._id;
   // SO if we have a 'user' which returns TRUE, then we can authorize
   // if NOT - then we return json response with error message (403) unauthorized
   if (!user) {
     return res.status(403).json({
-      error: 'Not Authorized! Access Denied'
+      error: 'Not Authorized! Access Denied for isAuth Middleware'
     });
   }
   next();
+  
 };
+
 
 exports.isAdmin = (req, res, next) => {
   // admin should === 1 , so if admin === 0 then it is 403 unauthorized
   if (req.profile.role === 0) {
     return res.status(403).json({
-      error: 'Admin Access! Access Denied' 
+      error: 'Admin Access FAIL! Access Denied for isAdmin Middleware' 
     });
   }
   next();

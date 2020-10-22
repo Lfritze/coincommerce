@@ -8,7 +8,7 @@ const {
   requireSignin
  } = require('../controllers/auth');
 // import userSignupValidator middleware
-const { userSignupValidator } = require('../validator/index');
+const { userSignupValidator } = require('../validator');
 
 // any time there is a request coming in the 'signUp' this controller method will run - see /controllers/user.js
 // same thing with the userSignupValidator
@@ -17,8 +17,8 @@ router.post('/signin', signIn);
 router.get('/signout', signOut);
 
 // anytime we want to restrict any routes, we can use the requireSignin middleware
-router.get('/hello', requireSignin, (req, res) => {
-  res.send('hello hello hello');
-});
+// router.get('/hello', requireSignin, (req, res) => {
+//   res.send('hello testing requireSignin');
+// });
 
 module.exports = router;
