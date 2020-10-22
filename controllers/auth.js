@@ -49,14 +49,14 @@ exports.signIn = (req, res) => {
       })
     }
     // generate a signed token with user id and secret (.env file)
-    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
     // persist the token as 't' in cookie with expiry date
     // expiry date is from now until 9999 seconds
-    res.cookie('t', token, {expire: new Date() + 9999})
+    res.cookie('t', token, { expire: new Date() + 9999 })
     // return response with user and token to frontend client
     // NOTE we de-structure user so that way we don't have to use user._id, user.email, user.name, user.role etc
     const {_id, name, email, role} = user
-    return res.json({token, user: {_id, email, name, role}})
+    return res.json({token, user: { _id, email, name, role }})
   });
 };
 

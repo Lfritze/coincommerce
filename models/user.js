@@ -48,17 +48,18 @@ const userSchema = new mongoose.Schema({
 );
 
 // Virtual Field
-userSchema.virtual('password')
-.set(function(password) {
-  this._password = password
-  // SALT is a long unique string to generate the hashed password - salt is a file server to act as a transparent bridge to external resources.
-  this.salt = uuidv1()
-  // we take the hashed password and the value of this will be based on what we got from the client side- however, it will be encrypted before it is saved as 'hashed_password'
-  this.hashed_password = this.encryptPassword(password)
-})
-.get(function() {
-  return this._password
-})
+userSchema
+  .virtual('password')
+  .set(function(password) {
+    this._password = password
+    // SALT is a long unique string to generate the hashed password - salt is a file server to act as a transparent bridge to external resources.
+    this.salt = uuidv1()
+    // we take the hashed password and the value of this will be based on what we got from the client side- however, it will be encrypted before it is saved as 'hashed_password'
+    this.hashed_password = this.encryptPassword(password)
+  })
+  .get(function() {
+    return this._password
+  })
 
 // Helper Methods
 userSchema.methods = {
@@ -75,7 +76,8 @@ userSchema.methods = {
       // Hmac instance is a cryptographic hash function and a secret cryptographic key
       // The crypto.createHmac() method is used to create Hmac instances. Hmac objects are not to be created directly using the new keyword.
       // sha1 is a cryptographic hash function
-      return crypto.createHmac('sha1', this.salt)
+      return crypto
+        .createHmac('sha1', this.salt)
         .update(password)
         .digest('hex')
     } catch (err) {
