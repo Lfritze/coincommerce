@@ -5,8 +5,6 @@ const { create } = require('../controllers/category');
 const { requireSignin, isAuth, isAdmin } = require('../controllers/auth');
 const { userById } = require('../controllers/user');
 
-
-
 // any time there is a request coming in the 'signUp' this controller method will run - see /controllers/user.js
 // same thing with the userSignupValidator
 router.post('/category/create/:userId', 
