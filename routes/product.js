@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 // import from controllers
-const { create, productById, read, remove } = require('../controllers/product');
+const { create, productById, read, remove, update } = require('../controllers/product');
 const { requireSignin, isAuth, isAdmin } = require('../controllers/auth');
 const { userById } = require('../controllers/user');
 
@@ -23,6 +23,14 @@ router.delete('/product/:productId/:userId',
   isAuth,
   isAdmin,
   remove 
+  )
+
+// Update Product
+  router.put('/product/:productId/:userId', 
+  requireSignin, 
+  isAuth,
+  isAdmin,
+  update
   )
 
 // we are just taking the parameter 'userId' rather than using a 'get' method
