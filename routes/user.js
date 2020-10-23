@@ -13,6 +13,7 @@ router.get('/secret/:userId', requireSignin, isAuth, isAdmin, (req, res) => {
 });
 
 // we are just taking the parameter 'userId' rather than using a 'get' method
+// anytime there is userId in the route - we run the middleware 'userById' and makes the user available in the request
 router.param('userId', userById)
 
 module.exports = router;

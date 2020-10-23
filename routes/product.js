@@ -4,6 +4,7 @@ const router = express.Router();
 const { create } = require('../controllers/product');
 const { requireSignin, isAuth, isAdmin } = require('../controllers/auth');
 const { userById } = require('../controllers/user');
+const { productById } = require('../controllers/product');
 
 
 
@@ -17,7 +18,11 @@ router.post("/product/create/:userId",
 );
 
 // we are just taking the parameter 'userId' rather than using a 'get' method
+// anytime there is userId in the route - we run the middleware 'userById' and makes the user available in the request
 router.param('userId', userById);
+// anytime there is productId in the route - we run the middleware 'productById' and makes the product available in the request
+router.param('productId', productById);
+
 
 
 module.exports = router;
