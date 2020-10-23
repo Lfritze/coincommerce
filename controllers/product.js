@@ -14,14 +14,44 @@ exports.create = (req, res) => {
     if (err) {
       return res.status(400).json({
         error: 'Image could not be uploaded'
-      })
+      });
     }
-    // if there is no error we can upload the product image
+
+     // We also need to make sure all of the fields are present for creating a product (description, price, category, shipping, quantity, photo)
+     // check for all fields 
+     // we get all of these from 'fields'
+     const {
+      name, 
+      description, 
+      price, 
+      category, 
+      quantity, 
+      shipping
+    } = fields
+
+     if (!name || !description || !price || !category || !quantity || !shipping) {
+       return res.status(400).json({
+        error: 'All fields are required (excluding photo)'
+      });
+     }
+
+    // if there is no error and all fields are filled, we can upload the product image
     // we create the new product with the fields we got above
     let product = new Product(fields)
+   
+    // Let's restrict the file size for uploading
+    // NOTES: 1kb = 1000
+    // 1mb = 1,000,000  aka - 1 million
+
     // we need to handle the files as well
     // Note: photo might also be img
     if (files.photo) {
+      // console.log('FILES PHOTO: ', files.photo);
+      if (files.photo.size > 1000000) {
+        return res.status(400).json({
+        error: 'Image must be less than 1mb in size'
+      });
+      }
       product.photo.data = fs.readFileSync(files.photo.path)
       product.photo.contentType = files.photo.type
     }
