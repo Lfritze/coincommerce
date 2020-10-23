@@ -5,7 +5,7 @@ const { requireSignin, isAuth, isAdmin } = require('../controllers/auth');
 // import from controllers
 const { userById } = require('../controllers/user');
 
-router.get('/secret/:userId', requireSignin, isAuth, (req, res) => {
+router.get('/secret/:userId', requireSignin, isAuth, isAdmin, (req, res) => {
  // we are sending the json response with the request profile which contains the user information
   res.json({
     user: req.profile
