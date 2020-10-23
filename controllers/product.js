@@ -4,6 +4,21 @@ const _ = require('lodash');
 const fs = require('fs');
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
+// productById MIDDLEWARE
+exports.productById = (req, res, next, id) => {
+  // we access the Product Model with findById based on this incoming 'id'
+  Product.findById(id).exec((err, product) => {
+    if (err || !product) {
+      return res.status(400).json({
+        error: 'Product not found! - by productById middleware'
+      });
+    }
+    // populate the request with the product if the product exists
+    req.product = product;
+    next();
+  });
+};
+
 // NOTE: we need to send the form data because we need to handle the image upload
 // we are going to user formidable for image uploading and lodash for the helper methods
 exports.create = (req, res) => {
