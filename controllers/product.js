@@ -102,7 +102,67 @@ exports.remove = (req, res) => {
     res.json({
       // deletedProduct, note this sends the entire deleted object - this is unnecessary but optional.
       "message": "Product deleted successfully"
-    })
-  })
+    });
+  });
+};
 
-}
+// update MIDDLEWARE
+exports.update = (req, res) => {
+  // IncomingForm comes with the formidable package
+  let form = new formidable.IncomingForm()
+  // keep the form extensions true
+  form.keepExtensions = true
+  // then we parse the form
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      return res.status(400).json({
+        error: 'Image could not be uploaded'
+      });
+    }
+
+     // We also need to make sure all of the fields are present for creating a product (description, price, category, shipping, quantity, photo)
+     // check for all fields 
+     // we get all of these from 'fields'
+     const {
+      name, 
+      description, 
+      price, 
+      category, 
+      quantity, 
+      shipping
+    } = fields
+
+     if (!name || !description || !price || !category || !quantity || !shipping) {
+       return res.status(400).json({
+        error: 'All fields are required (excluding photo)'
+      });
+     };
+    // once we have the product, we replace the existing information
+    let product = req.product
+     // we can use the EXTEND method from lodash (imported at top)
+     product= _.extend(product, fields)
+
+
+    // we need to handle the files as well
+    // Note: photo might also be img
+    // if there is no error and all fields are filled, we can upload the product image
+    if (files.photo) {
+      // console.log('FILES PHOTO: ', files.photo);
+      if (files.photo.size > 1000000) {
+        return res.status(400).json({
+        error: 'Image must be less than 1mb in size'
+      });
+      }
+      product.photo.data = fs.readFileSync(files.photo.path)
+      product.photo.contentType = files.photo.type
+    }
+    product.save((err, result) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(error)
+        });
+      }
+      res.json(result)
+    });
+  });
+};
