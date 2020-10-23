@@ -19,6 +19,13 @@ exports.productById = (req, res, next, id) => {
   });
 };
 
+// read MIDDLEWARE - based on 'R' in CRUD
+exports.read = (req, res) => {
+  // we just need to respond the PRODUCT from the req.product
+  req.product.photo = undefined
+  return res.json(req.product);
+}
+
 // NOTE: we need to send the form data because we need to handle the image upload
 // we are going to user formidable for image uploading and lodash for the helper methods
 exports.create = (req, res) => {
