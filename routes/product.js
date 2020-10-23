@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 // import from controllers
-const { create } = require('../controllers/product');
+const { create, productById, read } = require('../controllers/product');
 const { requireSignin, isAuth, isAdmin } = require('../controllers/auth');
 const { userById } = require('../controllers/user');
-const { productById } = require('../controllers/product');
 
+// we want to get the single product and READ the product (this is based on CREAT, READ, UPDATE, DELETE)
+router.get('/product/:productId', read)
 
 
 // any time there is a request coming in the 'signUp' this controller method will run - see /controllers/user.js
