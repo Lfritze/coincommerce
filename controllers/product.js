@@ -87,3 +87,22 @@ exports.create = (req, res) => {
     });
   });
 };
+
+// remove aka - delete MIDDLEWARE
+exports.remove = (req, res) => {
+  // we get the product from the request
+  // any time there is a productId in the route parameter - the productById method above runs and it make the product available in the request 
+  let product = req.product
+  product.remove((err, deletedProduct) => {
+    if (err) {
+      return res.status(400).json({
+          error: errorHandler(error)
+        });
+    }
+    res.json({
+      // deletedProduct, note this sends the entire deleted object - this is unnecessary but optional.
+      "message": "Product deleted successfully"
+    })
+  })
+
+}
