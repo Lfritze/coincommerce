@@ -119,7 +119,6 @@ exports.update = (req, res) => {
         error: 'Image could not be uploaded'
       });
     }
-
      // We also need to make sure all of the fields are present for creating a product (description, price, category, shipping, quantity, photo)
      // check for all fields 
      // we get all of these from 'fields'
@@ -166,3 +165,57 @@ exports.update = (req, res) => {
     });
   });
 };
+
+/**
+ * We want to return the products based on SELL & ARRIVAL
+ * This is a common and important feature for an ecommerce application
+ * 
+ * We want to show specific items based on SELL
+ * The idea is to show certain products based on SELL. So, if certain products have been sold more than other products, then we want to return those products to the Frontend client so that we can display them as MOST POPULAR
+ */
+
+ // We are going to create a method that will grab the route parameters and based on that it will fetch the products from the database and return to the fronted client
+
+ // if we want to return the product by SELL, we need route query parameters
+ // this will only return 4 products on its request
+ // we can change descending (desc) to ascending (asc)
+ // sell =/products?sortBy=sold&order=desc&limit=4
+ // when we create a new product - timestamps are created
+ // arrival =/products?sortBy=createdAt&order=desc&limit=4
+
+ // if no params are sent, then all products are returned
+
+ exports.list = (req, res) => {
+   // grab the route queries
+   // we grab (the value that is coming from req.query.order) otherwise by default it will be 'ascending'
+   let order = req.query.order ? req.query.order : 'asc'
+   // we grab (the value that is coming from req.query.sortBy) otherwise by default it will be 'ascending'
+   let sortBy = req.query.sortBy ? req.query.sortBy : 'asc'
+   // we grab (the value that is coming from req.query.limit) otherwise by default it will be '6' as the limit
+   let limit = req.query.limit ? req.query.limit : '6'
+
+   // to get all of the products
+   Product.find()
+    // we use the select method - and we want to deselect because we are saving all of the photos for each product in the database in the binary data 
+    // Each photo size will be huge - so when we are return all of the products, we don't want to send the photo - it will be too slow
+    .select("-photo")
+    // then we make another request to fetch the photo of that product 
+    // then each product will populate the category
+    // 'Category' is in the product model
+    // populate() is a built-in method
+    .populate('Category')
+    // then we need to sort it out
+    // we use an array of arrays for this 
+    // then we pass on how we want to sort
+    .sort([[sortBy, order]])
+    .limit(limit)
+    // use a cb for errors or success
+    .exec((err, products) => {
+      if (err) {
+        return res.status(400).json({
+          error: "Products not found"
+        });
+      }
+      res.send(products)
+    })
+ }

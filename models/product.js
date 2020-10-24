@@ -32,6 +32,12 @@ const productSchema = new mongoose.Schema({
     type: Number,
     // we will need to decrement the quantity as stuff is sold
   },
+  sold: {
+    type: Number,
+    // by default - sold items will be 0
+    default: 0
+    // if a product is sold - we will need to update (decrement) the 'quantity' above and increment 'sold'
+  },
   photo: {
     data: Buffer,
     contentType: String,
