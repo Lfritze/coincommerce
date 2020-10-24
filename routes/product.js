@@ -18,6 +18,7 @@ router.post("/product/create/:userId",
 );
 
 // Delete a Product
+// NOTE: we use REMOVE instead of DELETE because DELETE is an object key word
 router.delete('/product/:productId/:userId', 
   requireSignin, 
   isAuth,
