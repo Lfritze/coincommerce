@@ -217,8 +217,25 @@ exports.update = (req, res) => {
           error: "Products not found"
         });
       }
-      res.send(products)
+      res.json(products)
     })
  }
 
- // NOTES
+ // It will find the products based on the req product category
+ // Based on that - other products that has the same category, will be returned
+ exports.listRelated = (req, res) => {
+  let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+  // we want to find other products by _id base on category but not including 'itself'
+  // we can use $ne for 'not including' - in MongoDB
+  Product.find({_id: { $ne: req.product }, category: req.product.category})
+  .limit(limit)
+  .populate('category', '_id name')
+  .exec((err, products) => {
+    if (err) {
+        return res.status(400).json({
+          error: "Products not found"
+        });
+      }
+      res.json(products)
+  })
+ }

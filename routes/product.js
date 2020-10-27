@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 // import from controllers
-const { create, productById, read, remove, update, list } = require('../controllers/product');
+const { create, productById, read, remove, update, list, listRelated } = require('../controllers/product');
 const { requireSignin, isAuth, isAdmin } = require('../controllers/auth');
 const { userById } = require('../controllers/user');
 
@@ -37,6 +37,7 @@ router.delete('/product/:productId/:userId',
 // Route to return all the products
 // 
 router.get('/products', list)
+router.get('/products/related/:productId', listRelated)
 
 // we are just taking the parameter 'userId' rather than using a 'get' method
 // anytime there is userId in the route - we run the middleware 'userById' and makes the user available in the request
