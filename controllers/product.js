@@ -188,11 +188,12 @@ exports.update = (req, res) => {
  exports.list = (req, res) => {
    // grab the route queries
    // we grab (the value that is coming from req.query.order) otherwise by default it will be 'ascending'
-   let order = req.query.order ? req.query.order : 'asc'
+   let order = req.query.order ? req.query.order : 'asc';
    // we grab (the value that is coming from req.query.sortBy) otherwise by default it will be 'ascending'
-   let sortBy = req.query.sortBy ? req.query.sortBy : 'asc'
+   let sortBy = req.query.sortBy ? req.query.sortBy : 'asc';
    // we grab (the value that is coming from req.query.limit) otherwise by default it will be '6' as the limit
-   let limit = req.query.limit ? req.query.limit : '6'
+   // we need to parse the integer
+   let limit = req.query.limit ? parseInt(req.query.limit) : 6;
 
    // to get all of the products
    Product.find()
@@ -203,7 +204,7 @@ exports.update = (req, res) => {
     // then each product will populate the category
     // 'Category' is in the product model
     // populate() is a built-in method
-    .populate('Category')
+    .populate('category')
     // then we need to sort it out
     // we use an array of arrays for this 
     // then we pass on how we want to sort
@@ -219,3 +220,5 @@ exports.update = (req, res) => {
       res.send(products)
     })
  }
+
+ // NOTES
