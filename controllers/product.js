@@ -258,93 +258,49 @@ exports.listCategories = (req, res) => {
 // The product search will be on the frontend
 // we are going to show categories in a checkbox and price range with radio buttons
 // When the user clicks on the checkboxes and radio button - we make api requests and show the products to users
-// exports.listBySearch = (req, res) => {
-//     let order = req.body.order ? req.body.order : 'desc';
-//     let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
-//     let limit = req.body.limit ? parseInt(req.body.limit) : 100;
-//     // we are going to have a load more button (skip)
-//     // If they click on it, then we send the value
-//     let skip = parseInt(req.body.skip);
-//     // We populate this findArgs object based on the what we get in the req.body
-//     let findArgs = {};
-
-//     // console.log(order, sortBy, limit, skip, req.body.filters);
-//     // console.log("findArgs", findArgs);
-
-//     // We grab the key out of the req.body.filters object
-//     for (let key in req.body.filters) {
-//       // if the key has a length > 0
-//         if (req.body.filters[key].length > 0) {
-//           // if the key is price
-//             if (key === 'price') {
-//                 // gte (MongoDB Method) -  greater than price [0-10]
-//                 // (lte MongoDB Method) - less than
-//                 findArgs[key] = {
-//                   // WE grab the key > 0 and < 1   (index 1, 0) for price item range in array [0-10]
-//                     $gte: req.body.filters[key][0],
-//                     $lte: req.body.filters[key][1]
-//                 };
-//             } else {
-//                 // Otherwise we just grab the keys for CATEGORIES
-//                 findArgs[key] = req.body.filters[key];
-//             }
-//         }
-//     }
-
-//     Product.find(findArgs)
-//         .select('-photo')
-//         .populate('category')
-//         .sort([[sortBy, order]])
-//         .skip(skip)
-//         .limit(limit)
-//         .exec((err, data) => {
-//             if (err) {
-//                 return res.status(400).json({
-//                     error: 'Products not found'
-//                 });
-//             }
-//             res.json({
-//                 size: data.length,
-//                 data
-//             });
-//         });
-// };
-
 exports.listBySearch = (req, res) => {
-    let order = req.body.order ? req.body.order : "desc";
-    let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
+    let order = req.body.order ? req.body.order : 'desc';
+    let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
     let limit = req.body.limit ? parseInt(req.body.limit) : 100;
+    // we are going to have a load more button (skip)
+    // If they click on it, then we send the value
     let skip = parseInt(req.body.skip);
+    // We populate this findArgs object based on the what we get in the req.body
     let findArgs = {};
- 
+
     // console.log(order, sortBy, limit, skip, req.body.filters);
     // console.log("findArgs", findArgs);
- 
+
+    // We grab the key out of the req.body.filters object
     for (let key in req.body.filters) {
+      // if the key has a length > 0
         if (req.body.filters[key].length > 0) {
-            if (key === "price") {
-                // gte -  greater than price [0-10]
-                // lte - less than
+          // if the key is price
+            if (key === 'price') {
+                // gte (MongoDB Method) -  greater than price [0-10]
+                // (lte MongoDB Method) - less than
                 findArgs[key] = {
+                  // WE grab the key > 0 and < 1   (index 1, 0) for price item range in array [0-10]
                     $gte: req.body.filters[key][0],
                     $lte: req.body.filters[key][1]
                 };
             } else {
+                // Otherwise we just grab the keys for CATEGORIES
                 findArgs[key] = req.body.filters[key];
             }
         }
     }
- 
+
     Product.find(findArgs)
-        .select("-photo")
-        .populate("category")
+        .select('-photo')
+        .populate('category')
         .sort([[sortBy, order]])
         .skip(skip)
         .limit(limit)
         .exec((err, data) => {
             if (err) {
                 return res.status(400).json({
-                    error: "Products not found"
+                    error: 'Products not found'
                 });
             }
             res.json({
@@ -353,3 +309,4 @@ exports.listBySearch = (req, res) => {
             });
         });
 };
+
