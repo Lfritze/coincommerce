@@ -185,18 +185,18 @@ exports.update = (req, res) => {
 
  // if no params are sent, then all products are returned
 
- exports.list = (req, res) => {
+exports.list = (req, res) => {
    // grab the route queries
    // we grab (the value that is coming from req.query.order) otherwise by default it will be 'ascending'
-   let order = req.query.order ? req.query.order : 'asc';
+  let order = req.query.order ? req.query.order : 'asc';
    // we grab (the value that is coming from req.query.sortBy) otherwise by default it will be 'ascending'
-   let sortBy = req.query.sortBy ? req.query.sortBy : 'asc';
+  let sortBy = req.query.sortBy ? req.query.sortBy : 'asc';
    // we grab (the value that is coming from req.query.limit) otherwise by default it will be '6' as the limit
    // we need to parse the integer
-   let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+  let limit = req.query.limit ? parseInt(req.query.limit) : 6;
 
    // to get all of the products
-   Product.find()
+  Product.find()
     // we use the select method - and we want to deselect because we are saving all of the photos for each product in the database in the binary data 
     // Each photo size will be huge - so when we are return all of the products, we don't want to send the photo - it will be too slow
     .select("-photo")
@@ -223,19 +223,33 @@ exports.update = (req, res) => {
 
  // It will find the products based on the req product category
  // Based on that - other products that has the same category, will be returned
- exports.listRelated = (req, res) => {
+exports.listRelated = (req, res) => {
   let limit = req.query.limit ? parseInt(req.query.limit) : 6;
-  // we want to find other products by _id base on category but not including 'itself'
-  // we can use $ne for 'not including' - in MongoDB
+    // we want to find other products by _id base on category but not including 'itself'
+    // we can use $ne for 'not including' - in MongoDB
   Product.find({_id: { $ne: req.product }, category: req.product.category})
   .limit(limit)
   .populate('category', '_id name')
   .exec((err, products) => {
     if (err) {
-        return res.status(400).json({
-          error: "Products not found"
-        });
-      }
-      res.json(products)
+      return res.status(400).json({
+        error: "Products not found"
+      });
+    }
+    res.json(products)
+  });
+};
+
+exports.listCategories = (req, res) => {
+   // We use the distinct() method from MongoDB 
+   // This - (Finds the distinct values for a specified field across a single collection or view and returns the results in an array.)
+   // We give it an empty object for query {}
+  Product.distinct("category", {}, (err, categories) => {
+    if (err) {
+      return res.status(400).json({
+        error: 'Categories not found'
+      });
+    }
+    res.json(categories);
   })
- }
+};
