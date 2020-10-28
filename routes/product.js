@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 // import from controllers
-const { create, productById, read, remove, update, list, listRelated, listCategories, listBySearch } = require('../controllers/product');
+const { create, productById, read, remove, update, list, listRelated, listCategories, listBySearch, photo } = require('../controllers/product');
 const { requireSignin, isAuth, isAdmin } = require('../controllers/auth');
 const { userById } = require('../controllers/user');
 
@@ -41,7 +41,9 @@ router.get('/products/related/:productId', listRelated)
 // Returns all categories based on Products
 router.get('/products/categories', listCategories);
 // Route to search (filter) products by products, categories, and price range we send in req.body
-router.post("/products/by/search", listBySearch);
+router.post('/products/by/search', listBySearch);
+// Route to get photo
+router.get('/product/photo/:productId', photo)
 
 
 // we are just taking the parameter 'userId' rather than using a 'get' method
