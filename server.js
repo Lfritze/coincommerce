@@ -7,7 +7,12 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 // We will be saving the user credentials in the cookie - A cookie is a small piece of data that a server sends to the user's web browser
 const cookieParser = require('cookie-parser');
+// CORS (Cross-Origin Resource Sharing )
+// {is a mechanism that allows restricted resources on a web page to be requested 
+// from another domain outside the domain from which the first resource was served.}
 // Express Validator (this is a middleware) (Note: I set it back to version 5.3.1 in pkg.json and ran npm install to prevent an error
+// CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
+const cors = require('cors');
 const expressValidator = require('express-validator');
 require('dotenv').config();
 // import routes
@@ -34,6 +39,9 @@ server.use(morgan('dev'));
 server.use(bodyParser.json());
 server.use(cookieParser());
 server.use(expressValidator());
+// CORS - our api is running on port 8000 and our frontend client is running on port 3001
+// So if we make a request from frontend port 3001 to backend port 8000 - we use CORS
+server.use(cors());
 
 // Routes Middleware **************
 // prepend api so any user route starts with api
@@ -50,3 +58,4 @@ const port = process.env.PORT || 8000;
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 })
+
