@@ -4,7 +4,7 @@ import Layout from '../core/Layout';
 
 const Signup = () => {
   // Function to show the signup FORM
-  const signUpForm = () => {
+  const signUpForm = () => (
     <form>
       <div className="form-group">
         <label className="text-muted">Name</label>
@@ -18,8 +18,9 @@ const Signup = () => {
         <label className="text-muted">Password</label>
         <input type="password" className="form-control" />
       </div>
+      <button className="btn btn-primary">Submit</button>
     </form>
-  }
+  );
   return (
     <Layout title="Signup" description="Signup for Node React E-commerce App">
       {signUpForm()}
