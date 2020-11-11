@@ -13,6 +13,7 @@ const Layout = ({title = 'Title Filler',
     <h2>{title}</h2>
     <p className="lead">{description}</p>
     </div>
+    {/* We can pass this {className} to render {children} - the main content of the children props*/}
     <div className={className}>{children}</div>
   </div>
 );
