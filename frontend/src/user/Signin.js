@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import Layout from '../core/Layout';
-import { signin, authenticate } from '../auth/index';
+import { signin, authenticate, isAuthenticated } from '../auth/index';
 
 // Create a state so anytime they type something in the form fields
 // and for when the user click the submit button - we grab all the values stored in the state
@@ -12,9 +12,8 @@ const Signin = () => {
   // except the default value for success will be false
   // SO THIS IS OUR CURRENT STATE - until the user changes it
   const [values, setValues] = useState({
-    name: '', 
-    email: '',
-    password: '',
+    email: 'Leighton@gmail.com',
+    password: 'password1',
     error: '',
     loading: false,
     redirectToReferrer: false
@@ -22,6 +21,9 @@ const Signin = () => {
   // Let's de-structure the values above
   const {email, password, error, loading, redirectToReferrer} = values
   // now we can create a new user with these values
+
+  // Let's de-structure the USER - now we can redirect the user based on their role (admin or regular user)
+  const {user} = isAuthenticated();
 
   // Now we need a handleChange method
   // this is going to be a higher order function (a function returning another function)
@@ -95,9 +97,16 @@ const Signin = () => {
 
   const redirectUser = () => {
     if(redirectToReferrer) {
-      return 
-        <Redirect to="/" />
+      if(user && user.role === 1) {
+        return <Redirect to="/admin/dashboard" />
+      } else {
+        return <Redirect to="/user/dashboard" />
+      }
+        
     }
+    if (isAuthenticated()) {
+            return <Redirect to="/" />;
+        }
   }
 
   return (
@@ -111,8 +120,6 @@ const Signin = () => {
         {showError()}
         {signInForm()} 
         {redirectUser()}
-        {/* JSON stringify so when there is a change - we can see the data live (whatever data we have in the state we will be able to see) */}
-        {/* {JSON.stringify(values)} */}
     </Layout>
   );
 };
