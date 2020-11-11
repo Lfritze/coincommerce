@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../core/Layout';
-import { API } from '../config';
+import { signup } from '../auth/index';
 
 // Create a state so anytime they type something in the form fields
 // and for when the user click the submit button - we grab all the values stored in the state
@@ -34,31 +34,13 @@ const Signup = () => {
   // to create a new user we create a new method 
   // user comes from the clickSubmit below
   // the Javascript object { name, email, password } represents the USER 
-  const signup = (user) => {
-    // console.log(name, email, password)
-    // Now we need to send this data to the backend - we can use FETCH
-    return fetch(`${API}/signup`, {
-      method: "POST",
-      headers: {
-        Accept: 'application/json',
-        "Content-Type": "application/json"
-      },
-      // We can't send the JavaScript object to the backend so we use JSON Stringify 
-      body: JSON.stringify(user)
-    })
-    .then(response => {
-      return response.json()
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }
+  
 
   const clickSubmit = (event) => {
     // prevent the default behaviour of the browser - when the button is clicked we don't want the page to reload
     event.preventDefault()
     setValues({...values, error: false})
-    // grab the name, email, password (javaScript object) from state because we need to send the data to the backend
+    // grab to send the name, email, password (javaScript object) from state because we need to send the data to the backend
     signup({ name, email, password })
     // When we submit - or give the USER data to sign up - we get the data with a cb function
     .then(data => {
