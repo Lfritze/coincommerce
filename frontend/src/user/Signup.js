@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../core/Layout';
 import { API } from '../config';
 
@@ -18,7 +19,7 @@ const Signup = () => {
     success: false
   })
   // Let's de-structure the values above
-  const {name, email, password} = values
+  const {name, email, password, error, success} = values
   // now we can create a new user with these values
 
   // Now we need a handleChange method
@@ -36,7 +37,7 @@ const Signup = () => {
   const signup = (user) => {
     // console.log(name, email, password)
     // Now we need to send this data to the backend - we can use FETCH
-    fetch(`${API}/signup`, {
+    return fetch(`${API}/signup`, {
       method: "POST",
       headers: {
         Accept: 'application/json',
@@ -56,8 +57,27 @@ const Signup = () => {
   const clickSubmit = (event) => {
     // prevent the default behaviour of the browser - when the button is clicked we don't want the page to reload
     event.preventDefault()
+    setValues({...values, error: false})
     // grab the name, email, password (javaScript object) from state because we need to send the data to the backend
-    signup({ name, email, password });
+    signup({ name, email, password })
+    // When we submit - or give the USER data to sign up - we get the data with a cb function
+    .then(data => {
+      if(data.error) {
+        // we get the error in the state
+        // we grab the rest of the values with {...values}
+        setValues({...values, error: data.error, success: false})
+      } else {
+        // we clear what was typed in the signup old fields and make the state have empty strings (we change success to true)
+        setValues({
+          ...values,
+          name: '',
+          email: '',
+          password: '',
+          error: '',
+          success: true
+        })
+      }
+    })
 
   }
 
@@ -66,28 +86,45 @@ const Signup = () => {
     <form>
       <div className="form-group">
         <label className="text-muted">Name</label>
-        <input onChange={handleChange('name')} type="text" className="form-control" />
+        <input onChange={handleChange('name')} type="text" className="form-control" value={name} />
       </div>
       <div className="form-group">
         <label className="text-muted">Email</label>
-        <input onChange={handleChange('email')} type="email" className="form-control" />
+        <input onChange={handleChange('email')} type="email" className="form-control" value={email} />
       </div>
       <div className="form-group">
         <label className="text-muted">Password</label>
-        <input onChange={handleChange('password')} type="password" className="form-control" />
+        <input onChange={handleChange('password')} type="password" className="form-control" value={password} />
       </div>
       <button onClick={clickSubmit} className="btn btn-primary">Submit</button>
     </form>
   );
+
+  const showError = () => (
+    <div className="alert alert-danger" style={{display: error ? '': 'none'}}>
+        {error}
+      </div>
+  );
+   
+
+  const showSuccess = () => (
+    <div className="alert alert-info" style={{display: success ? '': 'none'}}>
+      New Account Created - Please <Link to='/signin'>Sign in</Link>
+    </div>
+  );
+
   return (
     <Layout 
       title="Signup" 
       description="Signup for Node React E-commerce App"
       // 12 columns
-      className="container col-md-8 offset-md-2">
-      {signUpForm()} 
-      {/* JSON stringify so when there is a change - we can see the data live (whatever data we have in the state we will be able to see) */}
-      {/* {JSON.stringify(values)} */}
+      className="container col-md-8 offset-md-2"
+      >
+        {showSuccess()}
+        {showError()}
+        {signUpForm()} 
+        {/* JSON stringify so when there is a change - we can see the data live (whatever data we have in the state we will be able to see) */}
+        {/* {JSON.stringify(values)} */}
     </Layout>
   );
 };
