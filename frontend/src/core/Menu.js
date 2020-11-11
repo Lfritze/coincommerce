@@ -1,6 +1,7 @@
-import React from 'react';
+// you can replace <div> with <Fragment> for conditionals
+import React, {Fragment} from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { signout } from '../auth/index';
+import { signout, isAuthenticated } from '../auth/index';
 
 // HELPER METHOD to highlight which part of the menu we are currently on (is active)
 // history will be the browser history
@@ -20,27 +21,36 @@ const Menu = ({ history }) => (
       <li className="nav-item">
         <Link className="nav-link" to="/" style={isActive(history, '/')}>Home</Link>
       </li>
-      <li className="nav-item">
-        <Link className="nav-link" to="/signin" style={isActive(history, '/signin')}>Sign In</Link>
-      </li>
-      <li className="nav-item">
-        <Link className="nav-link" to="/signup" style={isActive(history, '/signup')}>Sign Up</Link>
-      </li>
-      <li className="nav-item">
-        <span 
-          className="nav-link" 
-          style={{cursor: 'pointer', color: '#ffffff'}}
-          onClick={() => 
-            signout(() => {
-              history.push('/')
-            }) 
-          }
-        >
-          Sign Out
-        </span>
-      </li>
+
+      {!isAuthenticated() && (
+        <Fragment>
+          <li className="nav-item">
+            <Link className="nav-link" to="/signin" style={isActive(history, '/signin')}>Sign In</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/signup" style={isActive(history, '/signup')}>Sign Up</Link>
+          </li>
+        </Fragment>
+      )}
+
+      {isAuthenticated() && (
+        <Fragment>
+          <li className="nav-item">
+            <span 
+              className="nav-link" 
+              style={{cursor: 'pointer', color: '#ffffff'}}
+              onClick={() => 
+                signout(() => {
+                  history.push('/')
+              }) 
+              }
+            >
+              Sign Out
+            </span>
+          </li>
+        </Fragment>
+      )}
     </ul>
-    
   </div>
 );
 
