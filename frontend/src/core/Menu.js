@@ -17,9 +17,13 @@ const isActive = (history, path) => {
 
 const Menu = ({ history }) => (
   <div>
-    <ul className="nav nav-tabs bg-primary">
+    <ul className="nav nav-tabs bg-dark">
       <li className="nav-item">
         <Link className="nav-link" to="/" style={isActive(history, '/')}>Home</Link>
+      </li>
+
+      <li className="nav-item">
+        <Link className="nav-link" to="/dashboard" style={isActive(history, '/dashboard')}>Dashboard</Link>
       </li>
 
       {!isAuthenticated() && (
