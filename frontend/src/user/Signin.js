@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import Layout from '../core/Layout';
-import { signin } from '../auth/index';
+import { signin, authenticate } from '../auth/index';
 
 // Create a state so anytime they type something in the form fields
 // and for when the user click the submit button - we grab all the values stored in the state
@@ -52,14 +52,16 @@ const Signin = () => {
         setValues({...values, error: data.error, loading: false})
       } else {
         // we are redirecting the user so no need to change email, password (we change redirectToReferrer back to true)
-        setValues({
-          ...values,
-          redirectToReferrer: true
-        })
+        // data is what we get after sign in
+        authenticate(data, () => {
+          setValues({
+            ...values,
+            redirectToReferrer: true
+          });
+        });
       }
-    })
-
-  }
+    });
+  };
 
   // Function to show the signup FORM
   const signInForm = () => (
@@ -100,7 +102,7 @@ const Signin = () => {
   return (
     <Layout 
       title="Signin" 
-      description="Signin for Node React E-commerce App"
+      description="Signin to Node React E-commerce App"
       // 12 columns
       className="container col-md-8 offset-md-2"
       >

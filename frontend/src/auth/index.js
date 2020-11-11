@@ -39,3 +39,17 @@ export const signup = (user) => {
       console.log(err)
     })
   }
+
+  //we are getting the data after signing in  - token, user id, email, name, role
+  // IN chrome dev tools we see it in the NETWORK tab - we want to get it in the local storage in APPLICATION tab
+  // Note: typeof - It's an idiomatic check to see if the script is being run in a web-page inside a web-browser or not
+  export const authenticate = (data, next) => {
+    if(typeof window !== 'undefined') {
+      //The setItem() method sets the value of the specified Storage Object item.
+      //The setItem() method belongs to the Storage Object, which can be either a localStorage object or a sessionStorage object
+      // we are saving data with out key 'jwt'
+      // stringify converts JS to JSON
+      localStorage.setItem('jwt', JSON.stringify(data))
+      next()
+    }
+  }
