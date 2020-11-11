@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { signout } from '../auth/index';
 
 // HELPER METHOD to highlight which part of the menu we are currently on (is active)
 // history will be the browser history
@@ -14,19 +15,32 @@ const isActive = (history, path) => {
 }
 
 const Menu = ({ history }) => (
-  
   <div>
     <ul className="nav nav-tabs bg-primary">
       <li className="nav-item">
         <Link className="nav-link" to="/" style={isActive(history, '/')}>Home</Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/signin" style={isActive(history, '/signin')}>Signin</Link>
+        <Link className="nav-link" to="/signin" style={isActive(history, '/signin')}>Sign In</Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/signup" style={isActive(history, '/signup')}>Signup</Link>
+        <Link className="nav-link" to="/signup" style={isActive(history, '/signup')}>Sign Up</Link>
+      </li>
+      <li className="nav-item">
+        <span 
+          className="nav-link" 
+          style={{cursor: 'pointer', color: '#ffffff'}}
+          onClick={() => 
+            signout(() => {
+              history.push('/')
+            }) 
+          }
+        >
+          Sign Out
+        </span>
       </li>
     </ul>
+    
   </div>
 );
 
