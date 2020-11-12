@@ -83,9 +83,9 @@ const Signup = () => {
   );
 
   const showError = () => (
-    <div className="alert alert-danger" style={{display: error ? '': 'none'}}>
-        {error}
-      </div>
+    <div className="alert alert-danger" style={{ display: error ? '' : 'none' }}>
+      {error}
+    </div>
   );
    
 
