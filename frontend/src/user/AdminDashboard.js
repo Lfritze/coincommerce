@@ -47,10 +47,8 @@ const AdminDashboard = () => {
           {adminInfo()}
         </div>
       </div>
-      
-
     </Layout>
-  )
-}
+  );
+};
 
 export default AdminDashboard;
