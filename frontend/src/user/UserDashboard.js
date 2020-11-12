@@ -5,7 +5,7 @@ import {isAuthenticated} from '../auth/index';
 
 const Dashboard = () => {
 
-  // let's de-structure isAuthenticated and the further de-structure user
+  // let's de-structure isAuthenticated and the further de-structure USER within it
   const {user: {_id, name, email, role}} = isAuthenticated()
 
   const userLinks = () => {
