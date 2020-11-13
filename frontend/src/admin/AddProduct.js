@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Layout from '../core/Layout';
 import {isAuthenticated} from '../auth/index';
 import {createProduct, getCategories} from './apiAdmin';
 
 const AddProduct = () => {
-  // this method runs when the component mounts - anytime the values change
-  // useEffect(() => {
-  //   setValues({...values, formData: new FormData()})
-  // })
   const [values, setValues] = useState({
     name: '',
     description: '',
@@ -24,11 +20,11 @@ const AddProduct = () => {
     createdProduct: '',
     redirectToProfile: false,
     formData: ''
-    })
+  });
 
-    // De-structure isAuthenticated
-    const {user, token} = isAuthenticated();
-    // De-structure values
+  // De-structure isAuthenticated
+  const {user, token} = isAuthenticated();
+  // De-structure values
   const {
     name,
     description,
@@ -43,47 +39,47 @@ const AddProduct = () => {
     createdProduct,
     redirectToProfile,
     formData,
-    } = values 
+    } = values;
 
-    const init = () => {
-      getCategories().then(data => {
-        if (data.error) {
-          setValues({ ...values, error: data.error });
-        } else {
-          setValues({
-            ...values,
-            categories: data,
-            formData: new FormData()
-          });
-        }
-      });
-    };
+  const init = () => {
+    getCategories().then(data => {
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setValues({
+          ...values,
+          categories: data,
+          formData: new FormData()
+        });
+      }
+    });
+  };
 
-    useEffect(() => {
-        init();
-    }, []);
+  useEffect(() => {
+    init();
+  }, []);
 
-    //higher order function (function that returns another function)
-  const handleChange = (name) => (event) => {
+  //higher order function (function that returns another function)
+  const handleChange = name => event => {
     // need to dynamically pick whether it is a file or event
     // if we are getting a photo - we do not want to grab e.target.value - we want e.target.files[first on in the array]
-    const value = name === 'photo' ? event.target.files[0] : event.target.value
-    formData.set(name, value)
+    const value = name === 'photo' ? event.target.files[0] : event.target.value;
+    formData.set(name, value);
     // now we can set the state
     // first we grab the values in the state {...values}
     // then based on this evaluation - we set the values
-    setValues({...values, [name]: value})
+    setValues({ ...values, [name]: value });
   };
 
-  const clickSubmit = (event) => {
+  const clickSubmit = event => {
       // we want to use the createProduct method
-    event.preventDefault()
-    setValues({...values, error: '', loading: true})
+    event.preventDefault();
+    setValues({ ...values, error: '', loading: true });
 
     createProduct(user._id, token, formData)
       .then(data => {
         if(data.error) {
-          setValues({...values, error: data.error})
+          setValues({ ...values, error: data.error });
         } else {
           // empty form fields
           setValues({
@@ -97,10 +93,9 @@ const AddProduct = () => {
             createdProduct: data.name
           });
         }
-      })
+      });
     }
 
-    {/* IMAGE UPLOAD - IMAGE UPLOAD - IMAGE UPLOAD - IMAGE UPLOAD   */}
     const newPostForm = () => (
       <form className="mb-3" onSubmit={clickSubmit}>
         <h4>Post Photo</h4>
@@ -127,21 +122,16 @@ const AddProduct = () => {
         </div>
 
         <div className="form-group">
-                <label className="text-muted">Category</label>
-                <select onChange={handleChange('category')} className="form-control">
-                    <option>Please select</option>
-                    {categories &&
-                        categories.map((c, i) => (
-                            <option key={i} value={c._id}>
-                                {c.name}
-                            </option>
-                        ))}
-                </select>
-            </div>
-
-        <div className="form-group">
-          <label className="text-muted">Quantity</label>
-          <input onChange={handleChange('quantity')} type="number" className="form-control" value={quantity} />
+          <label className="text-muted">Category</label>
+            <select onChange={handleChange('category')} className="form-control">
+              <option>Please select</option>
+                {categories &&
+                  categories.map((c, i) => (
+                    <option key={i} value={c._id}>
+                      {c.name}
+                    </option>
+                  ))}
+            </select>
         </div>
 
         <div className="form-group">
@@ -151,6 +141,12 @@ const AddProduct = () => {
             <option value="1">Yes</option>
           </select>
         </div>
+
+        <div className="form-group">
+          <label className="text-muted">Quantity</label>
+          <input onChange={handleChange('quantity')} type="number" className="form-control" value={quantity} />
+        </div>
+
         <button className="btn btn-outline-dark">Create Product</button>
       </form>
     );
@@ -178,14 +174,13 @@ const AddProduct = () => {
     <Layout title="Add a new product" description={`Hello ${user.name}, Let's add a new product!`} >
       <div className="row">
         <div className="col-md-8 offset-md-2">
-          {newPostForm()}
           {showLoading()}
-          {showSuccess()}
+          {showSuccess()}          
           {showError()}
+          {newPostForm()}
         </div>
       </div>
     </Layout>
   );
-
 };
 export default AddProduct;
