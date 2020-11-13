@@ -43,12 +43,12 @@ export const createCategory = (userId, token, category) => {
     });
   };
 
-  export const getCategories = () => {
-    return fetch(`${API}/categories`, {
-        method: 'GET'
+export const getCategories = () => {
+  return fetch(`${API}/categories`, {
+    method: 'GET'
+  })
+    .then(response => {
+      return response.json();
     })
-        .then(response => {
-            return response.json();
-        })
-        .catch(err => console.log(err));
+    .catch(err => console.log(err));
 };
