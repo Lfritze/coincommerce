@@ -1,5 +1,6 @@
 import React from 'react';
-import Menu from './Menu'
+import Menu from './Menu';
+import "../styles.css"
 
 // props title, description, children
 const Layout = ({title = 'Title Filler', 
