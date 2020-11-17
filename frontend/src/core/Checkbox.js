@@ -32,7 +32,7 @@ const Checkbox = ({categories, handleFilters}) => {
       <input onChange={handleToggle(cat._id)} value={checked.indexOf(cat._id === 1)} type="checkbox" className="form-check-input"/>
       <label className="form-check-label">{cat.name}</label>
     </li>
-  ))
-}
+  ));
+};
 
 export default Checkbox;
