@@ -11,3 +11,14 @@ export const getProducts = (sortBy) => {
     })
     .catch(err => console.log(err));
 };
+
+// NOTE: this is also in apiAdmin - I just want to keep this in the same folder directory as Shop.js
+export const getCategories = () => {
+  return fetch(`${API}/categories`, {
+    method: 'GET'
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
