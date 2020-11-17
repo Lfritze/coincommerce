@@ -22,6 +22,11 @@ const Shop = () => {
     init();
   }, []);
 
+  // filterBy is either by category or price
+  const handleFilters = (filters, filterBy) => {
+    console.log('SHOP', filters, filterBy)
+  };
+
 
 
   return (
@@ -30,7 +35,7 @@ const Shop = () => {
         <div className="col-4">
           <h4>Filter by Categories</h4>
           <ul>
-            <Checkbox categories={categories} />
+            <Checkbox categories={categories} handleFilters={filters => handleFilters(filters, 'category')} />
           </ul>
         </div>
         <div className="col-8">

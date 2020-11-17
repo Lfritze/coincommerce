@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Checkbox = ({categories}) => {
+const Checkbox = ({categories, handleFilters}) => {
   //set the state for items checked
   // by default it is an empty array
   const [checked, setChecked] = useState([])
@@ -20,9 +20,11 @@ const Checkbox = ({categories}) => {
       // if it was already checked...then we need to uncheck it
       newCheckedCategoryId.splice(currentCategoryId, 1)
     }
-    console.log(newCheckedCategoryId)
+    // console.log(newCheckedCategoryId);
     // update the state 
-    setChecked(newCheckedCategoryId)
+    setChecked(newCheckedCategoryId);
+    // filter
+    handleFilters(newCheckedCategoryId);
   }
 
   return categories.map((cat, i) => (
