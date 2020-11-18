@@ -10,7 +10,8 @@ const Card = ({product}) => {
           {product.name}
           <div className="card-body">
             <ShowImage item={product} url="product" />
-            <p>{product.description}</p>
+            {/* // This is so we only show the first 100 characters in the description */}
+            <p>{product.description.substring(0, 100)}</p>
             <p>${product.price}</p>
             <Link to="/" >
               <button className="btn btn-outline-dark mt-2 mb-2 mr-2">
