@@ -1,7 +1,7 @@
 import React, { useState, useEffect }from 'react';
 import Layout from './Layout';
 import Card from './Card';
-import {getCategories} from './apiCore';
+import {getCategories, getFilteredProducts} from './apiCore';
 import Checkbox from './Checkbox';
 import {prices} from './FixedPrices';
 import RadioBox from './RadioBox';
@@ -12,8 +12,12 @@ const Shop = () => {
   })
   const [categories, setCategories] = useState([])
   const [error, setError] = useState(false)
+  const [limit, setLimit] = useState(6)
+  const [skip, setSkip] = useState(0)
+  const [filteredResults, setFilteredResults] = useState(0)
 
   const init = () => {
+    // loads categories
     getCategories().then(data => {
       if (data.error) {
         setError(data.error);
@@ -23,8 +27,20 @@ const Shop = () => {
     });
   };
 
+  const loadFilteredResults = (newFilters) => {
+    // console.log(newFilters)
+    getFilteredProducts(skip, limit, newFilters).then(data => {
+      if(data.error) {
+        setError(data.error)
+      } else {
+        setFilteredResults(data)
+      }
+    })
+  }
+
   useEffect(() => {
     init();
+    loadFilteredResults(skip, limit, myFilters.filters)
   }, []);
 
   // filterBy is either by category or price
@@ -38,6 +54,8 @@ const Shop = () => {
       let priceValues = handlePrice(filters)
       newFilters.filters[filterBy] = priceValues;
     }
+
+    loadFilteredResults(myFilters.filters)
     setMyFilters(newFilters);
   };
 
@@ -52,8 +70,7 @@ const Shop = () => {
       }
     }
     return array
-  }
-
+  };
 
   return (
     <Layout title="Shop Page" description="Search and find a collectable of your choice!" className="container-fluid">
@@ -68,7 +85,9 @@ const Shop = () => {
             <RadioBox prices={prices} handleFilters={filters => handleFilters(filters, 'price')} />
           </div>
         </div>
-        
+          <div className="col-8">{JSON.stringify(filteredResults)}
+
+          </div>
       </div>
     </Layout>
   )
