@@ -1,5 +1,5 @@
 import React, { useState, useEffect }from 'react';
-import { getCategories } from './apiCore';
+import { getCategories, list } from './apiCore';
 import Card from './Card';
 
 const Search = () => {
@@ -29,12 +29,35 @@ const Search = () => {
     loadCategories()
   }, []);
 
-  const searchSubmit = () => {
-    //
+  const searchData = () => {
+    // console.log(search, category)
+    // execute the list method from apiCore
+
+    if(search) {
+      // this expects the params
+      list({search: search || undefined, category: category})
+      .then(response => {
+        if(response.error) {
+          console.log(response.error)
+        } else {
+          setData({...data, results: response, searched: true})
+        }
+      })
+    }
   }
 
-  const handleChange = () => {
+  const searchSubmit = (event) => {
+    event.preventDefault();
+    // API request to get the products
+    // method is in apiCore
+    searchData();
+  }
+
+  // higher order function - a function returning another functions=
+  const handleChange = (name) => event => {
     // dropdown of categories
+    setData({...data, [name]: event.target.value, searched: false});
+
   }
 
   const searchForm = () => {
@@ -63,6 +86,7 @@ const Search = () => {
     <div className="row">
       <div className="container">
         {searchForm()}
+        {JSON.stringify(results)}
       </div>
     </div>
   )
