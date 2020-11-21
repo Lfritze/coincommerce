@@ -1,4 +1,5 @@
 import { API } from '../config';
+import queryString from 'query-string';
 
 // sorting elements by sell and by arrival
 // get in descending order and limit to 6
@@ -45,4 +46,19 @@ export const getCategories = () => {
         .catch(err => {
             console.log(err);
         });
+};
+
+export const list = params => {
+  const query = queryString.stringify(params)
+  console.log('query', query)
+  // params gives us the category id and whatever the user typed in the search bar
+  // install query-string with npm to properly send the query parameters
+  // stringify the params - JSON
+  return fetch(`${API}/products?${query}`, {
+    method: 'GET'
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
 };
