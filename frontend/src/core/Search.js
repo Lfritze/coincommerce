@@ -42,9 +42,9 @@ const Search = () => {
         } else {
           setData({...data, results: response, searched: true})
         }
-      })
+      });
     }
-  }
+  };
 
   const searchSubmit = (event) => {
     event.preventDefault();
@@ -59,17 +59,33 @@ const Search = () => {
     setData({...data, [name]: event.target.value, searched: false});
   }
 
+  const searchMessage = (searched, results) => {
+    if(searched && results.length > 0) {
+      return `Found ${results.length} Product(s)`;
+    }
+    if(searched && results.length < 1) {
+      return `No products found`;
+    }
+  };
+
   // sometimes the results might not be in the state - so we can make a default value results = [] an empty array
   const searchedProducts = (results = []) => {
-    // loop through each products we get in the results
+    // loop through each of the products we get in the results
     return (
-      <div className="row" >
-        {results.map((product, i) => (
-          <Card key={i} product={product} />
+      <div>
+        <h2 className="mt-4 mb-4">
+          {searchMessage(searched, results)}
+        </h2>
+        <div className="row">
+          {results.map((product, i) => (
+            <div className="col-4 mb-3">
+              <Card key={i} product={product} />
+            </div>
           ))}
+        </div>
       </div>
-    )
-  }
+    );
+  };
 
   const searchForm = () => {
     return (
@@ -78,7 +94,7 @@ const Search = () => {
           <div className="input-group input-group-lg">
             <div className="input-group-prepend">
               <select className="btn mr-2" onChange={handleChange("category")}>
-                <option value="All">Pick Category</option>
+                <option value="All">All</option>
                 {categories.map((cat, i) => (<option key={i} value={cat._id}>{cat.name}
                 </option>))}
               </select>
@@ -95,7 +111,7 @@ const Search = () => {
 
   return (
     <div className="row">
-      <div className="container">
+      <div className="container mb-3">
         {searchForm()}
       </div>
         {/* // loop through the results and display the results to the users */}
@@ -103,7 +119,7 @@ const Search = () => {
         {searchedProducts(results)}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Search;
