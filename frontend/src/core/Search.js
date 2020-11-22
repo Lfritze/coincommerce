@@ -57,7 +57,18 @@ const Search = () => {
   const handleChange = (name) => event => {
     // dropdown of categories
     setData({...data, [name]: event.target.value, searched: false});
+  }
 
+  // sometimes the results might not be in the state - so we can make a default value results = [] an empty array
+  const searchedProducts = (results = []) => {
+    // loop through each products we get in the results
+    return (
+      <div className="row" >
+        {results.map((product, i) => (
+          <Card key={i} product={product} />
+          ))}
+      </div>
+    )
   }
 
   const searchForm = () => {
@@ -86,7 +97,10 @@ const Search = () => {
     <div className="row">
       <div className="container">
         {searchForm()}
-        {JSON.stringify(results)}
+      </div>
+        {/* // loop through the results and display the results to the users */}
+      <div className="container-fluid mb-3">
+        {searchedProducts(results)}
       </div>
     </div>
   )
