@@ -1,8 +1,21 @@
 const express = require('express');
 const router = express.Router();
 // import from controllers
-const { create, productById, read, remove, update, list, listRelated, listCategories, listBySearch, photo } = require('../controllers/product');
+const { create, 
+        productById, 
+        read, 
+        remove, 
+        update, 
+        list, 
+        listRelated, 
+        listCategories, 
+        listBySearch, 
+        photo,
+        listSearch 
+} = require('../controllers/product');
+// import from auth controller
 const { requireSignin, isAuth, isAdmin } = require('../controllers/auth');
+// import from user controller
 const { userById } = require('../controllers/user');
 
 // we want to get the single product and READ the product (this is based on CREAT, READ, UPDATE, DELETE)
@@ -36,6 +49,8 @@ router.delete('/product/:productId/:userId',
 
 // Route to return all the products
 router.get('/products', list)
+// This is for the SEARCH BAR
+router.get('/products/search', listSearch);
 // Route to return all the products with matching CATEGORIES
 router.get('/products/related/:productId', listRelated)
 // Returns all categories based on Products

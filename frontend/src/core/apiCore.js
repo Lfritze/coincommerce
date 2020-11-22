@@ -54,7 +54,7 @@ export const list = params => {
   // params gives us the category id and whatever the user typed in the search bar
   // install query-string with npm to properly send the query parameters
   // stringify the params - JSON
-  return fetch(`${API}/products?${query}`, {
+  return fetch(`${API}/products/search?${query}`, {
     method: 'GET'
   })
     .then(response => {
