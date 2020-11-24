@@ -1,11 +1,36 @@
 /* border radius */
-
 .btn, .jumbotron, .nav :hover {
   border-radius: 0px;
 }
 
-/* product image on card */
+/* Single Prodcut Page - Product NAME * - see Card.js */
+.name {
+    background: #0b5fa0;
+    color: #f2f2f2;
+    font-weight: bold;
+}
 
+/* Black Shade form 10-1 on Single Product Page - see Card.js*/
+.black-10 {
+    background: #f2f2f2;
+}
+.black-9 {
+    background: #e6e6e6;
+}
+.black-8 {
+    background: #d9d9d9;
+}
+.black-7 {
+    background: #cccccc;
+}
+.black-6 {
+    background: #bfbfbf;
+}
+.black-5 {
+    background: #b3b3b3;
+}
+
+/* product image on card */
 .product-img {
   min-height: 100px;
 }
@@ -21,7 +46,6 @@
 }
 
 /* jumbotron */
-
 .jumbotron {
     width: 30wh;
     height: 30vh;
