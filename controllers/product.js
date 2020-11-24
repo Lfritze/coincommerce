@@ -7,10 +7,13 @@ const { errorHandler } = require("../helpers/dbErrorHandler");
 // productById MIDDLEWARE
 exports.productById = (req, res, next, id) => {
   // we access the Product Model with findById based on this incoming 'id'
-  Product.findById(id).exec((err, product) => {
-    if (err || !product) {
-      return res.status(400).json({
-        error: 'Product not found! - by productById middleware'
+  Product.findById(id)
+    // .populate('category')is so that is the category shows up in the Card.js on the frontend
+    .populate('category')
+    .exec((err, product) => {
+      if (err || !product) {
+        return res.status(400).json({
+          error: 'Product not found! - by productById middleware'
       });
     }
     // populate the request with the product if the product exists

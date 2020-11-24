@@ -72,3 +72,14 @@ export const read = (productId) => {
     })
     .catch(err => console.log(err));
 };
+
+// This show a list of related products according to category
+export const listRelated = (productId) => {
+  return fetch(`${API}/products/related/${productId}`, {
+    method: 'GET'
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
