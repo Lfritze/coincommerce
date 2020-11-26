@@ -1,9 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import ShowImage from './ShowImage';
 import moment from 'moment';
+import addItem from './cartHelpers'
 
 const Card = ({product, showViewProductButton = true}) => {
+
+  const [rediredt, setRedirect] = useState(false)
 
   const showViewButton = showViewProductButton => {
     return (
@@ -15,9 +18,22 @@ const Card = ({product, showViewProductButton = true}) => {
     );
   };
 
+  const addToCart = () => {
+    // we add the product to the localStorage
+    addItem(product, () => {
+      setRedirect(true)
+    })
+  }
+
+  const shouldRedirect = redirect => {
+    if(redirect) {
+      return <Redirect to="/cart" />
+    }
+  }
+
   const showAddToCartButton = () => {
     return (
-      <button className="btn btn-outline-success mt-2 mb-2">
+      <button onClick={addToCart} className="btn btn-outline-success mt-2 mb-2">
               Add to cart
             </button>
     );
@@ -36,6 +52,7 @@ const Card = ({product, showViewProductButton = true}) => {
       <div className="card">
         <div className="card-header name">{product.name}</div>
         <div className="card-body">
+          {shouldRedirect(rediredt)}
           <ShowImage item={product} url="product" />
           {/* // This is so we only show the first 100 characters in the description */}
           <p className="card-p mt-2">{product.description.substring(0, 100)}</p>
