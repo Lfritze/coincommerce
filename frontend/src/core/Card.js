@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import ShowImage from './ShowImage';
 import moment from 'moment';
-import addItem from './cartHelpers'
+import {addItem} from './cartHelpers'
 
 const Card = ({product, showViewProductButton = true}) => {
 
