@@ -2,6 +2,7 @@
 import React, {Fragment} from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { signout, isAuthenticated } from '../auth/index';
+import { itemTotal } from './cartHelpers'
 
 // HELPER METHOD to highlight which part of the menu we are currently on (is active)
 // history will be the browser history
@@ -24,6 +25,14 @@ const Menu = ({ history }) => (
 
       <li className="nav-item">
         <Link className="nav-link" to="/shop" style={isActive(history, '/shop')}>Shop</Link>
+      </li>
+      
+      <li className="nav-item">
+        <Link className="nav-link" to="/cart">Cart 
+          <sup>
+            <small className="cart-badge">{itemTotal()}</small>
+          </sup>
+      </Link>
       </li>
       
 
