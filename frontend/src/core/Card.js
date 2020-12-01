@@ -9,12 +9,14 @@ const Card = ({
   showViewProductButton = true, 
   showAddToCartButton = true,
   cartUpdate = false,
-  showRemoveProductButton = false
+  showRemoveProductButton = false,
+  setRun = f => f, // default value of function
+  run = undefined // default value of undefined
 }) => {
 
-  const [rediredt, setRedirect] = useState(false)
-  // the default state is whatever is laready there in localStorage
-  const [count, setCount] = useState(product.count)
+  const [redirect, setRedirect] = useState(false);
+  // the default state is whatever is already there in localStorage
+  const [count, setCount] = useState(product.count);
 
   const showViewButton = showViewProductButton => {
     return (
@@ -28,10 +30,9 @@ const Card = ({
 
   const addToCart = () => {
     // we add the product to the localStorage
-    addItem(product, () => {
-      setRedirect(true)
-    })
-  }
+    addItem(product, setRedirect(true));
+  };
+  
 
   const shouldRedirect = redirect => {
     if(redirect) {
@@ -41,19 +42,26 @@ const Card = ({
 
   const showAddToCart = (showAddToCartButton) => {
     return showAddToCartButton && (
-      <Link to="/cart"> 
-        <button onClick={addToCart} className="btn btn-outline-success mt-2 mb-2">
-          Add to cart
-        </button>
-      </Link>
+      <button onClick={addToCart} className="btn btn-outline-success mt-2 mb-2">
+        Add to cart
+      </button>
+      
     );
   };
 
   const showRemoveButton = (showRemoveProductButton) => {
-    return showRemoveProductButton && (
-      <button onClick={() => removeItem(product._id) } className="btn btn-outline-danger mt-2 mb-2">
-              Remove Product
-            </button>
+    return ( 
+      showRemoveProductButton && (
+        <button 
+          onClick={() => {
+            removeItem(product._id);
+            setRun(!run); // run useEffect in parent Cart
+          }} 
+          className="btn btn-outline-danger mt-2 mb-2"
+        >
+          Remove Product
+        </button>
+    )
     );
   }
 
@@ -82,6 +90,7 @@ const Card = ({
 
   // higher order function - funtion that returns a function
   const handleChange = productId => event => {
+    setRun(!run); // run useEffect in parent Cart
     // whatever the user types in the input - we grab that event
     // we set default value to 1
     setCount(event.target.value < 1 ? 1 : event.target.value)
@@ -95,7 +104,7 @@ const Card = ({
       <div className="card">
         <div className="card-header name">{product.name}</div>
         <div className="card-body">
-          {shouldRedirect(rediredt)}
+          {shouldRedirect(redirect)}
           <ShowImage item={product} url="product" />
           {/* // This is so we only show the first 100 characters in the description */}
           <p className="card-p mt-2">{product.description.substring(0, 100)}</p>
