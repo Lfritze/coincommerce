@@ -9,7 +9,8 @@ const Cart = () => {
 
   useEffect(() => {
     setItems(getCart())
-  }, [])
+  }, [items]);
+  
 // showAddToCartButton is a prop
   const showItems = items => {
     return (
@@ -22,6 +23,7 @@ const Cart = () => {
             product={product} 
             showAddToCartButton={false}
             cartUpdate={true} 
+            showRemoveProductButton={true}
           />
           ))}
       </div>
