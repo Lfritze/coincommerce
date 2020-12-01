@@ -11,6 +11,7 @@ import AdminDashboard from './user/AdminDashboard'
 import AddCategory from './admin/AddCategory';
 import AddProduct from './admin/AddProduct';
 import Product from './core/Product';
+import Cart from './core/Cart';
 // import Menu from './core/Menu'
 
 // we need to create a component that checks if the user is authenticated
@@ -30,6 +31,7 @@ const Routes = () => {
         <AdminRoute path='/admin/dashboard' exact component={AdminDashboard} />
         <AdminRoute path='/create/category' exact component={AddCategory} />
         <AdminRoute path='/create/product' exact component={AddProduct} />
+        <Route path='/cart' exact component={Cart} />
       </Switch>
       
     </BrowserRouter>

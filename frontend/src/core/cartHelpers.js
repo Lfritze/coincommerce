@@ -36,12 +36,14 @@ export const itemTotal = () => {
     return 0;
 };
 
+// get the cart itmes from the localStorage
 export const getCart = () => {
     if (typeof window !== 'undefined') {
         if (localStorage.getItem('cart')) {
             return JSON.parse(localStorage.getItem('cart'));
         }
     }
+    // if nothing is in the cart we return an empty array by default
     return [];
 };
 
@@ -86,4 +88,5 @@ export const emptyCart = next => {
         next();
     }
 };
+
 

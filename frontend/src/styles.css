@@ -6,10 +6,12 @@
 /* cart badge */
 .cart-badge, .cart-badge:hover {
     border-radius: 50%;
-    padding: 2px;
+    padding: 3px;
+    margin-left: 10%;
     font-size: 12px;
     font-style: italic;
-    background: #12647d;
+    background: #386877;
+    color: #f2f2f2
 
 }
 
