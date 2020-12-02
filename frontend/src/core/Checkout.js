@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
 import { getBraintreeClientToken, processPayment } from './apiCore';
-
+import { emptyCart } from './cartHelpers';
 import { isAuthenticated } from '../auth/index';
 
 // INSTALLED npm install braintree-web-drop-in-react 
@@ -77,8 +77,12 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
       processPayment(userId, token, paymentData)
       .then(response => {
         // console.log(response)
-        setData({ ...data, success: response.success })
+        setData({ ...data, success: response.success });
         // empty cart
+        emptyCart(() => {
+          console.log('payment success and empty cart')
+          window.location.reload();
+        })
         // create order
       })
       .catch(error => console.log(error))
