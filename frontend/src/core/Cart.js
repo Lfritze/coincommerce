@@ -53,7 +53,7 @@ const Cart = () => {
           <h2 className="mb-b">Your cart summary</h2>
           <hr />
           {/* products is props and items is from state */}
-          <Checkout products={items} />
+          <Checkout products={items} setRun={setRun} run={run} />
         </div>
       </div>
     </Layout>
