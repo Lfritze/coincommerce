@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
-import { getBraintreeClientToken } from './apiCore';
+import { getBraintreeClientToken, processPayment } from './apiCore';
 
 import { isAuthenticated } from '../auth/index';
 
@@ -27,9 +27,9 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
     getBraintreeClientToken(userId, token).then(data => {
       if(data.error){
         console.log(data.error);
-        setData({...data, error: data.error})
+        setData({ ...data, error: data.error })
       } else {
-        setData({...data, clientToken: data.clientToken})
+        setData({ clientToken: data.clientToken })
       }
     })
   }
@@ -64,15 +64,28 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
     let nonce;
     let getNonce = data.instance.requestPaymentMethod()
     .then(data => {
-      console.log(data)
+      // console.log(data)
       nonce = data.nonce
       // once you have nonce (card type, card number ) send nonce as 'paymentMethod nonce to backend
       // also total to be charged
-      console.log('send nonce and total to process: ', nonce, getTotal(products))
+      // console.log('send nonce and total to process: ', nonce, getTotal(products))
+      const paymentData = {
+        paymentMethodNonce: nonce,
+        amount: getTotal(products)
+      }
+      
+      processPayment(userId, token, paymentData)
+      .then(response => {
+        // console.log(response)
+        setData({ ...data, success: response.success })
+        // empty cart
+        // create order
+      })
+      .catch(error => console.log(error))
     })
     .catch(error => {
-      console.log('dropin error: ', error)
-      setData({...data, error: error.messaage})
+      // console.log('dropin error: ', error)
+      setData({ ...data, error: error.messaage })
     })
   }
 
@@ -88,21 +101,34 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
             authorization: data.clientToken
           }} 
           onInstance={instance => (data.instance = instance)} />
-          <button onClick={buy} className="btn btn-success">Pay</button>
+          <button onClick={buy} className="btn btn-success btn-block">Pay</button>
         </div>
       ) : null}
     </div>
   );
 
   const showError = error => (
-    <div className="alert alert-danger" style={{display: error ? '' : 'none'}}>
+    <div 
+      className="alert alert-danger" 
+      style={{display: error ? '' : 'none'}}
+    >
       {error}
+    </div>
+  );
+
+  const showSuccess = success => (
+    <div 
+      className="alert alert-info" 
+      style={{display: success ? '' : 'none'}}
+    >
+      Thank you, your payment was successful!
     </div>
   );
 
   return (
     <div>
       <h2>Total: ${getTotal()}</h2>
+      {showSuccess(data.success)}
       {showError(data.error)}
       {showCheckout()}
     </div>
