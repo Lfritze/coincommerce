@@ -47,13 +47,6 @@ export const getCart = () => {
     return [];
 };
 
-export const emptyCart = next => {
-    if (typeof window !== 'undefined') {
-        localStorage.removeItem('cart');
-        next();
-    }
-};
-
 export const updateItem = (productId, count) => {
     let cart = []
     if(typeof window !== 'undefined') {
@@ -86,6 +79,13 @@ export const removeItem = (productId) => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
     return cart
+};
+
+export const emptyCart = next => {
+    if(typeof window !== 'undefined') {
+        localStorage.removeItem('cart')
+        next()
+    }
 };
 
 
