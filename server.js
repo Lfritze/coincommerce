@@ -21,6 +21,7 @@ const userRoutes = require('./routes/user');
 const categoryRoutes = require('./routes/category');
 const productRoutes = require('./routes/product');
 const braintreeRoutes = require('./routes/braintree');
+const orderRoutes = require('./routes/order');
 
 // Server ***************
 const server = express();
@@ -51,6 +52,7 @@ server.use('/api', userRoutes);
 server.use('/api', categoryRoutes);
 server.use('/api', productRoutes);
 server.use('/api', braintreeRoutes);
+server.use('/api', orderRoutes);
 
 
 // *********************
