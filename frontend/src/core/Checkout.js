@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
-import { getBraintreeClientToken, processPayment } from './apiCore';
+import { getBraintreeClientToken, processPayment, createOrder } from './apiCore';
 import { emptyCart } from './cartHelpers';
 import { isAuthenticated } from '../auth/index';
 
@@ -38,7 +38,11 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
   // when the compenent mounts and there is a change in state - you need useEffect
   useEffect(() => {
     getToken(userId, token)
-  }, [])
+  }, []);
+
+  const handleAddress = event => {
+    setData({...data, address: event.target.value})
+  }
 
   const getTotal = () => {
     // Reduce() docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
@@ -81,13 +85,21 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
       .then(response => {
         // console.log(response)
         setData({ ...data, success: response.success });
+        // before we empty the cart - we want to create the order
+        const createOrderData = {
+          // products are props
+          products: products,
+          transaction_id: response.transaction_id,
+          amount: response.transaction.amount,
+          address: data.address
+        }
+        createOrder(userId, token, createOrderData)
         // empty cart
-        emptyCart(() => {
+         emptyCart(() => {
           console.log('payment success and empty cart')
           setData({ loading: false})
           window.location.reload();
         })
-        // create order
       })
       .catch(error => {
         console.log(error)
@@ -107,6 +119,16 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
     <div onBlur={() => setData({...data, error: "" }) }>
       {data.clientToken !== null && products.length > 0 ? (
         <div>
+          <div className="form-group mb-3">
+            <label className="text-muted">Delivery address:</label>
+            <textarea 
+              onChange={handleAddress}
+              className="form-control"
+              value={data.address}
+              placeholder="Type your delivery address here..."
+            />
+
+          </div>
           <DropIn 
             options={{
             authorization: data.clientToken,
