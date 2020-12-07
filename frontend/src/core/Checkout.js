@@ -61,6 +61,8 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
     )
   };
 
+  let deliveryAddress = data.address
+
   const buy = () => {
     // to diplay loading message
     setData({ loading: true})
@@ -91,7 +93,7 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
           products: products,
           transaction_id: response.transaction_id,
           amount: response.transaction.amount,
-          address: data.address
+          address: deliveryAddress
         }
         createOrder(userId, token, createOrderData)
         // empty cart
