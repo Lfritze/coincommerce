@@ -84,8 +84,8 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
       processPayment(userId, token, paymentData)
       .then(response => {
         // console.log(response)
-        setData({ ...data, success: response.success });
-        // before we empty the cart - we want to create the order
+        // setData({ ...data, success: response.success });
+        // before we empty the cart - we want to create the ordersetData({ ...data, success: response.success })
         const createOrderData = {
           // products are props
           products: products,
@@ -96,10 +96,15 @@ const Checkout = ({products, setRun = f => f, run = undefined}) => {
         createOrder(userId, token, createOrderData)
         // empty cart
          emptyCart(() => {
+          setRun(!run); // run useEffect in parent Cart
           console.log('payment success and empty cart')
-          setData({ loading: false})
-          window.location.reload();
+          
+          setData({ 
+            loading: false,
+            success: true,
+          })
         })
+        // window.location.reload();
       })
       .catch(error => {
         console.log(error)
