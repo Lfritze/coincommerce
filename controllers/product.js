@@ -346,5 +346,24 @@ exports.listSearch = (req, res) => {
       // we also have to take the photo out bc it will be too slow
     }).select('-photo')
   }
+};
 
-}
+exports.decreaseQuantity = (req, res, next) => {
+  let bulkOps = req.body.order.products.map((item) => {
+    return {
+      updateOne: {
+        filter: {_id: item._id},
+        update: {$inc: {quantity: -item.count, sold: +item.count}}
+      }
+    }
+  })
+  // bulkWrite is a method built into Mongoose
+  Product.bulkWrite(bulkOps, {}, (error, products) => {
+    if (error) {
+      return res.status(400).json({
+      error: "Could not update product"
+      });
+    }
+    next();
+  });
+};
