@@ -5,6 +5,7 @@ const router = express.Router();
 const { requireSignin, isAuth } = require('../controllers/auth');
 const { userById, addOrderToUserHistory } = require('../controllers/user');
 const { create } = require('../controllers/order');
+const { decreaseQuantity } = require('../controllers/product');
 
 
 router.post(
@@ -12,6 +13,7 @@ router.post(
   requireSignin, 
   isAuth, 
   addOrderToUserHistory, 
+  decreaseQuantity,
   create
 );
 
