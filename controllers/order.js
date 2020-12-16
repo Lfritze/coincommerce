@@ -18,7 +18,7 @@ exports.create = (req, res) => {
 
 exports.listOrders = (req, res) => {
   Order.find()
-  .populate('user', _is, name, address)
+  .populate('user', '_is name address')
   .sort('-created')
   .exec((err, orders) => {
     if(err) {
