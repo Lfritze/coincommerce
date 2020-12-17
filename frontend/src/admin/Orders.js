@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Layout from '../core/Layout';
 import {isAuthenticated} from '../auth/index';
 import { listOrders } from './apiAdmin';
+import moment from 'moment';
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
@@ -23,16 +24,56 @@ const Orders = () => {
     loadOrders()
   }, [])
 
-  const noOrders = orders => {
-    return orders.length < 1 ? <h4>No Orders</h4> : null;
+  const showOrdersLength = () => {
+    if(orders.length > 0) {
+      return (
+        <h1 className="text-danger display-2">
+          Total Orders: {orders.length}
+        </h1>
+      )
+    } else {
+      return <h1 className="text-danger">No orders</h1>
+    }
   };
 
   return (
     <Layout title="Orders" description={`Hello ${user.name}, you can manage all of the orders here!`} >
       <div className="row">
         <div className="col-md-8 offset-md-2">
-          {noOrders(orders)}
-          {JSON.stringify(orders)}
+          {showOrdersLength(orders)}
+          
+          {orders.map((ord, ordIndex) => {
+            return (
+              <div className="mt-5" key={ordIndex} style={{borderBottom: "5px solid #095ba0"}}>
+                <h2 className="mb-5">
+                  <span style={{background: "#1a849b"}}>Order ID: {ord._id}</span>
+                </h2>
+                <ul className="list-group mb-2">
+                  <li className="list-group-item">
+                    {ord.status}
+                  </li>
+                  <li className="list-group-item">
+                    Transaction ID: {ord.transaction_id}
+                  </li>
+                  <li className="list-group-item">
+                    Amount: ${ord.amount}
+                  </li>
+                  <li className="list-group-item">
+                    Ordered by: {ord.user.name}
+                  </li>
+                  <li className="list-group-item">
+                    Ordered on: {moment(ord.createAt).fromNow()}
+                  </li>
+                  <li className="list-group-item">
+                    Delivery Address: {ord.address}
+                  </li>
+                </ul>
+                <h3 className="mt-4 mb-4" font-italic>
+                  Total products in the order: {ord.products.length}
+                </h3>
+              </div>
+            )
+          })}
         </div>
       </div>
     </Layout>
