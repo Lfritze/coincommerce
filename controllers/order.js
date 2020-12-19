@@ -30,4 +30,6 @@ exports.listOrders = (req, res) => {
   });
 }
 
-// testing 123
+exports.getStatusValues = (req, res) => {
+  res.json(Order.schema.path('status').enumValues);
+}
