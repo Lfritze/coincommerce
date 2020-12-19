@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../core/Layout';
 import {isAuthenticated} from '../auth/index';
-import { listOrders } from './apiAdmin';
+import { listOrders, getStatusValues } from './apiAdmin';
 import moment from 'moment';
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
+
+  const [statusValues, setStatusValues] = useState([])
 
   const {user, token} = isAuthenticated()
 
@@ -17,11 +19,22 @@ const Orders = () => {
       } else {
         setOrders(data)
       }
-    })
-  }
+    });
+  };
+
+  const loadStatusValues = () => {
+    getStatusValues(user._id, token).then(data => {
+      if(data.error) {
+        console.log(data.error)
+      } else {
+        setStatusValues(data)
+      }
+    });
+  };
 
   useEffect(() => {
     loadOrders()
+    loadStatusValues()
   }, [])
 
   const showOrdersLength = () => {
@@ -48,8 +61,24 @@ const Orders = () => {
         className="form-control"
         readOnly
             />
-    </div>
+      </div>
     );
+
+  const handleStatusChange = (e, orderId) => {
+    console.log('update order status')
+  }
+
+  const showStatus = (ord) => (
+    <div className="form-group">
+      <h3 className="mark mb-4">Status: {ord.status}</h3>
+      <select 
+        className="form-control" 
+        onChange={event => (handleStatusChange(event, ord._id))}>
+        <option>Update Status</option>
+        {statusValues.map((status, index) => (<option key={index} value={status}>{status}</option>))}
+      </select>
+    </div>
+  )
 
   return (
     <Layout title="Orders" description={`Hello ${user.name}, you can manage all of the orders here!`} >
@@ -65,7 +94,7 @@ const Orders = () => {
                 </h2>
                 <ul className="list-group mb-2">
                   <li className="list-group-item">
-                    {ord.status}
+                    {showStatus(ord)}
                   </li>
                   <li className="list-group-item">
                     Transaction ID: {ord.transaction_id}
