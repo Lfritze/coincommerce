@@ -13,6 +13,7 @@ import AddProduct from './admin/AddProduct';
 import Product from './core/Product';
 import Cart from './core/Cart';
 import Orders from './admin/Orders';
+import Profile from './user/Profile';
 // import Menu from './core/Menu'
 
 // we need to create a component that checks if the user is authenticated
@@ -34,6 +35,7 @@ const Routes = () => {
         <AdminRoute path='/create/product' exact component={AddProduct} />
         <AdminRoute path='/admin/orders' exact component={Orders} />
         <Route path='/cart' exact component={Cart} />
+        <PrivateRoute path='/profile/:userId' exact component={Profile} />
       </Switch>
       
     </BrowserRouter>

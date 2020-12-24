@@ -32,13 +32,13 @@ export const signup = (user) => {
       // We can't send the JavaScript object to the backend so we use JSON Stringify 
       body: JSON.stringify(user)
     })
-    .then(response => {
-      return response.json()
-    })
-    .catch(err => {
+      .then(response => {
+        return response.json()
+      })
+      .catch(err => {
       console.log(err)
     })
-  }
+  };
 
   //we are getting the data after signing in  - token, user id, email, name, role
   // IN chrome dev tools we see it in the NETWORK tab - we want to get it in the local storage in APPLICATION tab
